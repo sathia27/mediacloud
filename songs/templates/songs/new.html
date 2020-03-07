@@ -1,0 +1,24 @@
+{# songs/templates/songs/index.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}Hello world!{% endblock %}
+{% block body %}
+    {{ super() }}
+    <h2>Add song</h2>
+    <form method="POST" action="/songs" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="uploadsong">Email address</label>
+        <input name="file" type="file" class="form-control" id="uploadsong">
+      </div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" id="name">
+      </div>
+      <div class="form-group">
+        <label for="album">Album</label>
+        <input type="text" name="album" class="form-control" id="album">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}
