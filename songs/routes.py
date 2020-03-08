@@ -1,12 +1,9 @@
 from flask import render_template, request, redirect, flash, send_file, url_for, Blueprint, current_app
 from .song import Song
-from . import db
 import os
 from werkzeug.utils import secure_filename
 
 song = Blueprint('song', __name__, url_prefix="/songs")
-
-# ROOT_PATH = app.root_path
 
 @song.route('/')
 def index():
@@ -33,8 +30,7 @@ def create():
         data = request.form
         filename = secure_filename(file.filename)
         song = Song(name=data['name'], album=data['album'], filename=filename)
-        db.session.add(song)
-        db.session.commit()
+        song.save()
         file.save(current_app.root_path + os.path.join(current_app.config['UPLOAD_FOLDER'], file_name(song)))
     else:
         flash('File not present or Invalid file')

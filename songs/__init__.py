@@ -12,7 +12,10 @@ def create_app():
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['UPLOAD_FOLDER'] = '/uploads'
     app.config['ALLOWED_EXTENSIONS'] = {'mp3'}
+    app.url_map.strict_slashes = False
+    os.makedirs(app.root_path + app.config.get('UPLOAD_FOLDER'), exist_ok=True)
     db.init_app(app)
+
     from .routes import song
     app.register_blueprint(song)
 
