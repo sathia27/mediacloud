@@ -1,10 +1,15 @@
 ### Mediazone
 Self hosted songs hosting service. Upload, Download and Play your favorite songs
 
+### Prequestics
+```.env
+Python 3
+```
 
-## How to run the app
+## How to install and run the app
 ```.env
 cd application-path
+pip3 install pipenv
 ./run.sh
 ```
 
