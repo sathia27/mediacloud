@@ -1,0 +1,17 @@
+{# songs/templates/index.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}Hello world!{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div class="card">
+      <div class="card-header">
+        Welcome user
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Welcome to Mediazone</h5>
+        <p class="card-text">You can now browse, play and download songs.</p>
+        <a href="/songs" class="btn btn-primary">Go</a>
+      </div>
+    </div>
+{% endblock %}

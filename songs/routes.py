@@ -1,45 +1,40 @@
 from flask import render_template, request, redirect, flash, send_file, url_for, Blueprint, current_app
 from .song import Song
-import os
 from werkzeug.utils import secure_filename
+import sqlalchemy
 
-song = Blueprint('song', __name__, url_prefix="/songs")
+song_blueprint = Blueprint('song_blueprint', __name__, url_prefix="/songs")
 
-@song.route('/')
+@song_blueprint.route('/')
 def index():
     return render_template('songs/index.html', songs=Song.query.all())
 
-@song.route('/new')
+@song_blueprint.route('/new')
 def new():
     return render_template('songs/new.html')
 
-@song.route('/download/<id>')
+@song_blueprint.route('/download/<id>')
 def download(id):
     song = Song.query.filter_by(id=id).first()
-    file_path = current_app.root_path + os.path.join(current_app.config['UPLOAD_FOLDER'], file_name(song))
-    return send_file(file_path, attachment_filename=song.filename, as_attachment=True)
+    return send_file(song.uploadable_path(), attachment_filename=song.filename, as_attachment=True)
 
-@song.route('/play/<id>')
+@song_blueprint.route('/play/<id>')
 def play(id):
-    return render_template('songs/play.html', file_path=url_for('.download', id=id))
+    song = Song.query.filter_by(id=id).first()
+    return render_template('songs/play.html', file_path=url_for('.download', id=id), song=song)
 
-@song.route('/', methods=['POST'])
+@song_blueprint.route('/', methods=['POST'])
 def create():
     file = request.files['file']
-    if file and allowed_file(file.filename):
+    if file and Song.allowed_file(file.filename):
         data = request.form
         filename = secure_filename(file.filename)
         song = Song(name=data['name'], album=data['album'], filename=filename)
-        song.save()
-        file.save(current_app.root_path + os.path.join(current_app.config['UPLOAD_FOLDER'], file_name(song)))
+        try:
+            song.save()
+            file.save(song.uploadable_path())
+        except sqlalchemy.exc.IntegrityError:
+            flash('Song already exists!')
     else:
         flash('File not present or Invalid file')
     return redirect(request.url)
-
-def file_name(song):
-    return str(song.id) + "_" + song.filename
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in current_app.config.get('ALLOWED_EXTENSIONS')

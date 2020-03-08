@@ -13,7 +13,8 @@
   </head>
   <body>
     <div class="container">
-      {% with messages = get_flashed_messages() %}
+      <div class="mx-md-n5">
+        {% with messages = get_flashed_messages() %}
         {% if messages %}
           <div class="alert alert-danger" role="alert">
             <ul class=flashes>
@@ -26,6 +27,7 @@
       {% endwith %}
         {% block body %}
         {% endblock %}
+      </div>
     </div>
 
 

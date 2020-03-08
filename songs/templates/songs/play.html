@@ -4,9 +4,14 @@
 {% block title %}Hello world!{% endblock %}
 {% block body %}
     {{ super() }}
-    <h2>Play</h2>
-    <audio controls>
-      <source src="{{file_path}}" type="audio/mp3">
-      Your browser does not support the audio element.
-    </audio>
+    <div class="card">
+      <div class="card-header">
+        Play {{song.name}} from {{song.album}}
+      </div>
+      <div class="card-body">
+          <audio controls>
+            <source src="{{file_path}}" type="audio/mp3">Your browser does not support the audio element.
+          </audio>
+        </div>
+    </div>
 {% endblock %}
