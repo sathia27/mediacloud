@@ -8,14 +8,11 @@ def create_app():
     """Construct the core application."""
     app = Flask(__name__)
     app.secret_key = 'asdas2jmmasasdm9492744snfdaaddnasnandsasn'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/development.db'
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['UPLOAD_FOLDER'] = '/uploads'
-    app.config['ALLOWED_EXTENSIONS'] = {'mp3'}
+    from .config import Config
+    app.config.from_object(Config)
     app.url_map.strict_slashes = False
     os.makedirs(app.root_path + app.config.get('UPLOAD_FOLDER'), exist_ok=True)
     db.init_app(app)
-
     from .routes import song_blueprint
     app.register_blueprint(song_blueprint)
 
