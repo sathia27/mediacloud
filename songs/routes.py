@@ -7,7 +7,9 @@ song_blueprint = Blueprint('song_blueprint', __name__, url_prefix="/songs")
 
 @song_blueprint.route('/')
 def index():
-    return render_template('songs/index.html', songs=Song.query.all())
+    page = int(request.args.get("page", "1"))
+    songs = Song.query.paginate(page= page, per_page= 20)
+    return render_template('songs/index.html', songs=songs)
 
 @song_blueprint.route('/new')
 def new():

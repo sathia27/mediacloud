@@ -1,4 +1,5 @@
 {# songs/templates/songs/index.html_ #}
+{% from "macros.html" import render_pagination %}
 
 {% extends "layout.html" %}
 {% block title %}Hello world!{% endblock %}
@@ -16,7 +17,7 @@
               </tr>
             </thead>
             <tbody>
-                {% for song in songs %}
+                {% for song in songs.items %}
                     <tr>
                         <td>{{ song.name }}</td>
                         <td>{{ song.album }}</td>
@@ -27,5 +28,6 @@
                 {% endfor %}
             </tbody>
         </table>
+        {{ render_pagination(songs, 'song_blueprint.index') }}
     </div>
 {% endblock %}
